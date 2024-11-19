@@ -3,7 +3,7 @@
 #define TEMPERATURE_PIN A0
 #define VELOCITY_PIN 11
 
-//Section enum type (1 byte)
+// 섹션 열거형 타입 (1 바이트)
 enum Section
 {
     SECTION_1 = 1,
@@ -11,11 +11,11 @@ enum Section
     SECTION_3,
     SECTION_4
 };
-//Lora module UART rx, tx pin
-//FIXME: If don't use serial communication with pc, you can use pin 0, 1 without SoftwareSerial
-//Then you can remove SoftwareSerial library and communicate with Serial.begin()
+// LoRa 모듈 UART rx, tx 핀
+// FIXME: PC와의 직렬 통신을 사용하지 않는다면, SoftwareSerial 없이 핀 0, 1을 사용할 수 있습니다.
+// 그러면 SoftwareSerial 라이브러리를 제거하고 Serial.begin()으로 통신할 수 있습니다.
 SoftwareSerial lora(2, 3);
-//Sensor data structure 
+// 센서 데이터 구조체
 struct SensorData
 {
     uint8_t section = SECTION_4;
@@ -23,10 +23,10 @@ struct SensorData
     int32_t temperature;
     int is_fire;
 };
-//Structure to store sensor data
+// 센서 데이터를 저장할 구조체
 SensorData sensor_data;
 SensorData getData();
-//Convert sensor data to <hex string> (Lora communication format)
+// 센서 데이터를 <16진수 문자열>로 변환 (LoRa 통신 형식)
 char *data2hex(SensorData sensor_data);
 
 void setup()
@@ -39,11 +39,11 @@ void setup()
 
 void loop()
 {
-    //Get sensor data
+    // 센서 데이터 가져오기
     sensor_data = getData();
     char command[30];
 
-    //Send sensor data to Lora module
+    // 센서 데이터를 LoRa 모듈로 전송
     sprintf(command, "AT+PSEND=%s", data2hex(sensor_data));
     lora.write(command);
     lora.write("\r\n");
@@ -51,7 +51,7 @@ void loop()
     delay(1000);
 }
 
-//define function-----------------------------------
+// 함수 정의-----------------------------------
 char *data2hex(SensorData _data)
 {
     static char hex_data[23];
